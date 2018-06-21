@@ -21,7 +21,8 @@ $GLOBALS['config']='
 "departmentsdir": "/tftpboot.bkp/pxelinux.cfg/depts/",
 "machinesdir": "/tftpboot.bkp/pxelinux.cfg/",
 "modesdir": "/tftpboot.bkp/pxelinux.cfg/modes/",
-"isodir": "/tftpboot.bkp/"
+"isodir": "/tftpboot.bkp/",
+"defaultmodepath": "/tftpboot.bkp/pxelinux.cfg/modes/default"
 }
 ';
 

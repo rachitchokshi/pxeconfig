@@ -1,5 +1,5 @@
 {
   "require": {
-    "diff/diff": "~2.0"
+    "peppeocchi/php-cron-scheduler": "^2.3"
   }
 }

@@ -6,21 +6,25 @@ namespace Composer\Autoload;
 
 class ComposerStaticInitda7c01b6e2d1c37ef2f0ec7e997c532b
 {
-    public static $files = array (
-        '3ef87127dc6892a0a78f223558a0b940' => __DIR__ . '/..' . '/diff/diff/Diff.php',
-    );
-
     public static $prefixLengthsPsr4 = array (
-        'D' => 
+        'G' => 
         array (
-            'Diff\\' => 5,
+            'GO\\' => 3,
+        ),
+        'C' => 
+        array (
+            'Cron\\' => 5,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Diff\\' => 
+        'GO\\' => 
         array (
-            0 => __DIR__ . '/..' . '/diff/diff/src',
+            0 => __DIR__ . '/..' . '/peppeocchi/php-cron-scheduler/src/GO',
+        ),
+        'Cron\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mtdowling/cron-expression/src/Cron',
         ),
     );
 

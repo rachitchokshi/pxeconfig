@@ -32,13 +32,20 @@ try
                     $iso = 'N/A';
                 }
 
-                $modetmp["Name"] = $mode;
-                $modetmp["file"] = $iso;
-                $modetmp["status"] = $status;
+                //do not show default boot mode
+                $defaultmode = (explode("/",$GLOBALS['config']['defaultmodepath']));
+                $defaultmode = array_values(array_slice($defaultmode, -1))[0];
 
-                if(stripos($modetmp["Name"],$_POST['Name'])!==false || stripos($modetmp["file"],$_POST['Name'])!==false || stripos($modetmp["status"],$_POST['Name'])!==false){
-                    $modestmp[] = $modetmp;
+                if($mode !== $defaultmode){
+                    $modetmp["Name"] = $mode;
+                    $modetmp["file"] = $iso;
+                    $modetmp["status"] = $status;
+
+                    if(stripos($modetmp["Name"],$_POST['Name'])!==false || stripos($modetmp["file"],$_POST['Name'])!==false || stripos($modetmp["status"],$_POST['Name'])!==false){
+                        $modestmp[] = $modetmp;
+                    }
                 }
+
             };
         }else{
             foreach (array_diff(glob($GLOBALS['config']["modesdir"].'*'), array('.', '..')) as $id=>$mode) {
@@ -66,12 +73,17 @@ try
                     $iso = 'N/A';
                 }
 
-                $modetmp["Name"] = $mode;
-                $modetmp["file"] = $iso;
-                $modetmp["status"] = $status;
+                //do not show default boot mode
+                $defaultmode = (explode("/",$GLOBALS['config']['defaultmodepath']));
+                $defaultmode = array_values(array_slice($defaultmode, -1))[0];
 
-
+                if($mode !== $defaultmode){
+                    $modetmp["Name"] = $mode;
+                    $modetmp["file"] = $iso;
+                    $modetmp["status"] = $status;
                     $modestmp[] = $modetmp;
+                }
+
             };
         }
 

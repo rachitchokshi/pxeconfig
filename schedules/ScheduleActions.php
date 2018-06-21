@@ -140,8 +140,7 @@ try
             file_put_contents($schedulepath,json_encode($json));
             $jTableResult['Result'] = "OK";
             print json_encode($jTableResult);
-    }
-
+        }
     }
     //Code to return list of modes configured in config.php
     else if($_GET["action"] == "listlabs")

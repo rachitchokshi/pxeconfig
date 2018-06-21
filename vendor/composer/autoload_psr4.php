@@ -6,5 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Diff\\' => array($vendorDir . '/diff/diff/src'),
+    'GO\\' => array($vendorDir . '/peppeocchi/php-cron-scheduler/src/GO'),
+    'Cron\\' => array($vendorDir . '/mtdowling/cron-expression/src/Cron'),
 );
