@@ -13,7 +13,8 @@ try
                 $depttmp["Name"] = $dept;
 
                 //calculate number of labs associated with this department
-                $count = exec("ls -la ". $GLOBALS['config']['departmentsdir'] .$dept."/E*|wc -l");
+                //$count = exec("ls -la ". $GLOBALS['config']['departmentsdir'] .$dept."/E*|wc -l");
+				$count = count(array_diff(glob($GLOBALS['config']['departmentsdir'] .$dept."/"."{E*,IS*}",GLOB_BRACE), array('.', '..')));
                 $depttmp["lab_count"] = $count;
 
                 //calculate number of machines under this department

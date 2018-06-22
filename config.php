@@ -34,7 +34,7 @@ if ($GLOBALS['config'] == null) {
 
 $config = $GLOBALS['config'];
 
-foreach (glob($config["labsdir"]."E*") as $lab) {
+foreach (glob($config["labsdir"]."{E*,IS*}",GLOB_BRACE) as $lab) {
     $array = (explode("/",$lab)); //splitting string containing full path to get lab name
     $lab = array_values(array_slice($array, -1))[0]; //reading last index of the array which contains the Lab name
     $labs[] = $lab;
@@ -48,7 +48,7 @@ foreach (array_diff(scandir($config["departmentsdir"]), array('.', '..')) as $id
 
     //calculate number of labs associated with this department
     //$count = exec("ls -la ". $GLOBALS['config']['departmentsdir'] .$dept."/E*|wc -l");
-    $count = count(array_diff(glob($GLOBALS['config']['departmentsdir'] .$dept."/E*"), array('.', '..')));
+    $count = count(array_diff(glob($GLOBALS['config']['departmentsdir'] .$dept."/"."{E*,IS*}",GLOB_BRACE), array('.', '..')));
     $depttmp["lab_count"] = $count;
 
     //calculate number of machines under this department

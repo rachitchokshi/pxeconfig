@@ -92,6 +92,11 @@ try
                         $labtmp["name"] = $lab;
                         $labtmp["dept"] = $dept;
                         $labtmp["mode"] = $bootmode;
+
+                        //calculate number of machines associated with this lab
+                        $count = exec("ls -la ". $GLOBALS['config']['machinesdir'] ."01-*|grep ".$lab."|wc -l");
+                        $labtmp["machinecount"] = $count;
+
                         break;
                     }
                 };
