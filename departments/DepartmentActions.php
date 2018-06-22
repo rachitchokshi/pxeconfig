@@ -167,12 +167,20 @@ try
 
             if($deletepath){
 
+                $count = count(array_diff(glob($deletepath.'/*'), array('.', '..','.schedules')));
+                if($count != 0){
+                    throw new Exception("There is atleast one LAB assigned to these department, please delete the LABs or assign them to other department");
+                }
+
+                //delete schedules file assuming its empty, i know its not safe
+                unlink($deletepath."/.schedules");
                 $status = rmdir($deletepath);
+
                 if($status){
                     $jTableResult['Result'] = "OK";
                 }else{
                     $jTableResult['Result'] = "ERROR";
-                    $jTableResult['Message'] = "There is atleast one LAB assigned to these department, please delete the LABs or assign them to other department";
+                    $jTableResult['Message'] = "Error occurred while deleting department, directory might not be empty";
                 }
             }else{
                 $jTableResult['Result'] = "ERROR";

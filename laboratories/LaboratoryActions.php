@@ -231,6 +231,16 @@ try
                     throw new Exception("There is atleast one machine belonging to this lab, please re-link the machines to another lab or delete them");
                 };
             };
+
+            //check if the lab has any schedules assigned to it
+            $schedulepath = $GLOBALS['config']['departmentsdir'].$dept."/.schedules";
+            if(file_exists($schedulepath)){
+                $json = json_decode(file_get_contents($schedulepath),true);
+                if(isset($json[$lab]) || count($json[$lab])!== 0){
+                    throw new Exception("There is atleast one schedule associated with this lab, please remove the schedule before deleting this lab");
+                }
+            }
+
             unlink($labpath);
             $jTableResult['Result'] = "OK";
 

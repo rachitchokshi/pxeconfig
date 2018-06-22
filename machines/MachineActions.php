@@ -33,10 +33,13 @@ try
         $jTableResult = array();
 
         //create new link for new machine
+        //sanitizing input
+        $_POST['lab'] = strtoupper($_POST['lab']);
         $result = validate_keys($_POST,['mac','dept','lab']);
         if ($result !== ""){
             $jTableResult['Result'] = "ERROR";
             $jTableResult['Message'] = $result;
+            print json_encode($jTableResult);
         }else{
             $_POST['mac'] = strtolower($_POST['mac']);
             if(preg_match('/([a-fA-F0-9]{2}[:]?){6}/', $_POST['mac']) == 1){
@@ -72,6 +75,8 @@ try
     {
         //Update machine name in filesystem
         $jTableResult = array();
+        //sanitizing input
+        $_POST['lab'] = strtoupper($_POST['lab']);
         $result = validate_keys($_POST,['mac','dept','lab']);
         if ($result !== ""){
             $jTableResult['Result'] = "ERROR";

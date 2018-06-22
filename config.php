@@ -143,7 +143,7 @@ function validate_keys($req,$keys){
 
         $name = htmlspecialchars(strip_tags(trim($_POST[$key])));
         if(!($name && strpos($name, '.') == false && strpos($name, '..') == false && strpos($name, '/') == false)){
-            $result = $result . "input value ". $name . "for field: " . $key . " is invalid, it must not contain dots or double dots";
+            $result = $result . "input value ". $name . " for field: " . $key . " is invalid, it must not contain dots or double dots";
         }
     }
     return $result;
