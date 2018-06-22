@@ -47,7 +47,8 @@ foreach (array_diff(scandir($config["departmentsdir"]), array('.', '..')) as $id
     $depttmp["Name"] = $dept;
 
     //calculate number of labs associated with this department
-    $count = exec("ls -la ". $GLOBALS['config']['departmentsdir'] .$dept."/E*|wc -l");
+    //$count = exec("ls -la ". $GLOBALS['config']['departmentsdir'] .$dept."/E*|wc -l");
+    $count = count(array_diff(glob($GLOBALS['config']['departmentsdir'] .$dept."/E*"), array('.', '..')));
     $depttmp["lab_count"] = $count;
 
     //calculate number of machines under this department

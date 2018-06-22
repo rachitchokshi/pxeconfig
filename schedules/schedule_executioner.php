@@ -29,3 +29,34 @@ function execute($args){
     }
 }
 
+//scan for schedules and schedule function calls for each of them
+$scheduler = new Scheduler();
+
+foreach (array_diff(scandir($config["departmentsdir"]), array('.', '..')) as $id=>$dept){
+    $schedulefile = $GLOBALS['config']['departmentsdir'].$dept . '/.schedules';
+
+    if(file_exists($schedulefile)){
+        $json = json_decode(file_get_contents($schedulefile),true);
+
+        //loop through all labs
+        foreach ($json as $labname => $lab){
+            //loop through all schedules of each lab
+            foreach ($lab as $id => $sched){
+                $args['dept'] = $dept;
+                $args['lab'] = $lab;
+                $args['mode'] = $sched['mode'];
+
+                //schedule for start expression
+                $args['startend'] = 'start';
+                $scheduler->call('execute',$args,$dept.$labname.$id)->at($sched['start']);
+
+                //schedule for end expression
+                $args['startend'] = 'end';
+                $scheduler->call('execute',$args,$dept.$labname.$id)->at($sched['end']);
+
+            }
+        }
+    }
+}
+
+$scheduler->run();
