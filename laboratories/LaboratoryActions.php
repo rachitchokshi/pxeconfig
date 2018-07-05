@@ -181,7 +181,12 @@ try
                             break;
                         }
                     };
-
+                    //check if reverting to default mode is requested, if yes then schedule one time job to revert back to default mode
+                    if(isset($_POST['revert_minutes'])&& $_POST['revert_minutes'] !== '0' && is_numeric($_POST['revert_minutes'])){
+                        $minutes = $_POST['revert_minutes'];
+                        $sched_minutes = date('H:i',strtotime('+'.$minutes.' minutes',strtotime(date("H:i"))));
+                        exec('echo ln -sf '.$GLOBALS['config']['defaultmodepath'].' '.$labpath.' | at '.$sched_minutes);
+                    }
                     $jTableResult['Result'] = "OK";
                     $jTableResult['Record'] = $labtmp;
 

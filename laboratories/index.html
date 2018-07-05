@@ -164,6 +164,24 @@
                         list:true,
                         options: 'LaboratoryActions.php?action=listmodes'
                     },
+                    revert_minutes: {
+                        title: 'Revert to default mode after',
+                        create: false,
+                        edit: true,
+                        list: false,
+                        options: {
+                            '0':'Do not Revert',
+                            '5':'5 minutes',
+                            '10':'10 minutes',
+                            '15':'15 minutes',
+                            '20':'20 minutes',
+                            '25':'25 minutes',
+                            '30':'30 minutes',
+                            '35':'35 minutes',
+                            '45':'45 minutes',
+                            '60':'1 hour'
+                        }
+                    },
                     machinecount: {
                         title: 'Number of machines',
                         create:false,

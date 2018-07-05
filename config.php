@@ -16,13 +16,13 @@ $GLOBALS['config']='
   "disk": "default"
   },
 "modedefault": "disk",
-"pxedir": "/tftpboot.bkp/pxelinux.cfg/",
-"labsdir": "/tftpboot.bkp/pxelinux.cfg/labs/",
-"departmentsdir": "/tftpboot.bkp/pxelinux.cfg/depts/",
-"machinesdir": "/tftpboot.bkp/pxelinux.cfg/",
-"modesdir": "/tftpboot.bkp/pxelinux.cfg/modes/",
-"isodir": "/tftpboot.bkp/",
-"defaultmodepath": "/tftpboot.bkp/pxelinux.cfg/modes/default"
+"pxedir": "/tftpboot/pxelinux.cfg/",
+"labsdir": "/tftpboot/pxelinux.cfg/labs/",
+"departmentsdir": "/tftpboot/pxelinux.cfg/depts/",
+"machinesdir": "/tftpboot/pxelinux.cfg/",
+"modesdir": "/tftpboot/pxelinux.cfg/modes/",
+"isodir": "/tftpboot/",
+"defaultmodepath": "/tftpboot/pxelinux.cfg/modes/default"
 }
 ';
 
