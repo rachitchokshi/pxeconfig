@@ -21,7 +21,7 @@ $GLOBALS['config']='
 "departmentsdir": "/tftpboot/pxelinux.cfg/depts/",
 "machinesdir": "/tftpboot/pxelinux.cfg/",
 "modesdir": "/tftpboot/pxelinux.cfg/modes/",
-"isodir": "/tftpboot/",
+"isodir": "/tftpboot/images/",
 "defaultmodepath": "/tftpboot/pxelinux.cfg/modes/default"
 }
 ';
@@ -34,11 +34,11 @@ if ($GLOBALS['config'] == null) {
 
 $config = $GLOBALS['config'];
 
-foreach (glob($config["labsdir"]."{E*,IS*}",GLOB_BRACE) as $lab) {
-    $array = (explode("/",$lab)); //splitting string containing full path to get lab name
-    $lab = array_values(array_slice($array, -1))[0]; //reading last index of the array which contains the Lab name
-    $labs[] = $lab;
-};
+//foreach (glob($config["labsdir"]."{E*,IS*}",GLOB_BRACE) as $lab) {
+//    $array = (explode("/",$lab)); //splitting string containing full path to get lab name
+//    $lab = array_values(array_slice($array, -1))[0]; //reading last index of the array which contains the Lab name
+//    $labs[] = $lab;
+//};
 
 
 foreach (array_diff(scandir($config["departmentsdir"]), array('.', '..')) as $id=>$dept) {

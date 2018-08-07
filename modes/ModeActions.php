@@ -15,11 +15,10 @@ try
                 $mode = array_values(array_slice($array, -1))[0];
 
                 //finding active ISO configured for this mode
-                $label = exec('grep -e "default " '.$GLOBALS['config']['modesdir'].$mode.' |awk \'{print $2}\'');
-//                var_dump($label);
-                $iso = exec("cat ".$GLOBALS['config']['modesdir'].$mode." |sed -n '/label ".$label."/{n;n;p}'|awk '{print $3}'");
-                $array = (explode("=",$iso));
-                $iso = array_values(array_slice($array, -1))[0];
+                $label = exec('grep -e "ONTIMEOUT " '.$GLOBALS['config']['modesdir'].$mode.' |awk \'{print $2}\'');
+                $iso = exec("grep initrd ".$GLOBALS['config']['modesdir'].$mode." |awk '{print $3}'|awk -F/ '{print $ NF}'");
+//                $array = (explode("=",$iso));
+//                $iso = array_values(array_slice($array, -1))[0];
 
                 if($iso !== ""){
                     if(is_file($GLOBALS['config']['isodir'].$iso)){
@@ -56,11 +55,12 @@ try
                 $mode = array_values(array_slice($array, -1))[0];
 
                 //finding active ISO configured for this mode
-                $label = exec('grep -e "default " '.$GLOBALS['config']['modesdir'].$mode.' |awk \'{print $2}\'');
+                $label = exec('grep -e "ONTIMEOUT " '.$GLOBALS['config']['modesdir'].$mode.' |awk \'{print $2}\'');
+                $iso = exec("grep initrd ".$GLOBALS['config']['modesdir'].$mode." |awk '{print $3}'|awk -F/ '{print $ NF}'");
 //                var_dump($label);
-                $iso = exec("cat ".$GLOBALS['config']['modesdir'].$mode." |sed -n '/label ".$label."/{n;n;p}'|awk '{print $3}'");
-                $array = (explode("=",$iso));
-                $iso = array_values(array_slice($array, -1))[0];
+//                $iso = exec("cat ".$GLOBALS['config']['modesdir'].$mode." |sed -n '/label ".$label."/{n;n;p}'|awk '{print $3}'");
+//                $array = (explode("=",$iso));
+//                $iso = array_values(array_slice($array, -1))[0];
 
                 if($iso !== ""){
                     if(is_file($GLOBALS['config']['isodir'].$iso)){
@@ -103,14 +103,35 @@ try
         }else if($_FILES['iso-file']['error']!==0){
             throw new Exception("could not process uploaded file, maximum allowed file size in 512MB");
         }else {
-            $base_config = 'prompt 1
-timeout 100
-default config
-display default.txt
 
-label config
+
+            $base_config = 'default vesamenu.c32
+
+PROMPT 0
+ALLOWOPTIONS 0
+NOESCAPE 1
+TIMEOUT 100
+ONTIMEOUT {MODE_NAME}
+
+MENU COLOR screen       0 #DEFBF0   #DEFBF0   std
+MENU COLOR timeout_msg  0 #8000dfdf #00000000 std      # Timout text
+MENU COLOR timeout      0 #c0ff3f7f #00000000 std      # Timout counter
+
+MENU AUTOBOOT {MODE_NAME} in # seconds
+MENU IMMEDIATE
+
+
+MENU TITLE {MODE_NAME}
+
+label {MODE_NAME}
+        menu DEFAULT
+        menu label ^1) {MODE_NAME}
         kernel memdisk
-        append iso initrd=placeholder.iso raw';
+        append iso initrd='.$GLOBALS['config']['isodir'].'{FILE_NAME} raw
+
+label Disk
+        menu label ^2) Disk
+        localboot 0';
 
             $mode_name = $_POST['Name'];
             $file_name = $_FILES['iso-file']['name'];
@@ -126,7 +147,8 @@ label config
             }
 
 
-            $new_config = str_replace('placeholder.iso',$file_name,$base_config);
+            $new_config = str_replace('{FILE_NAME}',$file_name,$base_config);
+            $new_config = str_replace('{MODE_NAME}',$mode_name,$new_config);
 
             //create config file
             $handler = fopen($GLOBALS['config']['modesdir'].$mode_name,'w');
@@ -155,14 +177,33 @@ label config
         if ($result !== ""){
             throw new Exception($result);
         }else {
-            $base_config = 'prompt 1
-timeout 100
-default config
-display default.txt
+            $base_config = 'default vesamenu.c32
 
-label config
+PROMPT 0
+ALLOWOPTIONS 0
+NOESCAPE 1
+TIMEOUT 100
+ONTIMEOUT {MODE_NAME}
+
+MENU COLOR screen       0 #DEFBF0   #DEFBF0   std
+MENU COLOR timeout_msg  0 #8000dfdf #00000000 std      # Timout text
+MENU COLOR timeout      0 #c0ff3f7f #00000000 std      # Timout counter
+
+MENU AUTOBOOT {MODE_NAME} in # seconds
+MENU IMMEDIATE
+
+
+MENU TITLE {MODE_NAME}
+
+label {MODE_NAME}
+        menu DEFAULT
+        menu label ^1) {MODE_NAME}
         kernel memdisk
-        append iso initrd=placeholder.iso raw';
+        append iso initrd='.$GLOBALS['config']['isodir'].'{FILE_NAME} raw
+
+label Disk
+        menu label ^2) Disk
+        localboot 0';
 
             $current_mode_name = $_POST['jtRecordKey'];
             $new_mode_name = $_POST['Name'];
@@ -188,10 +229,10 @@ label config
                 if($_FILES['iso-file']['error']==0){
                     //find current file and replace it with new file
                     //finding active ISO configured for this mode
-                    $label = exec('grep -e "default " '.$GLOBALS['config']['modesdir'].$current_mode_name.' |awk \'{print $2}\'');
-                    $iso = exec("cat ".$GLOBALS['config']['modesdir'].$current_mode_name." |sed -n '/label ".$label."/{n;n;p}'|awk '{print $3}'");
-                    $array = (explode("=",$iso));
-                    $iso = array_values(array_slice($array, -1))[0];
+                    $label = exec('grep -e "ONTIMEOUT " '.$GLOBALS['config']['modesdir'].$current_mode_name.' |awk \'{print $2}\'');
+                    $iso = exec("grep initrd ".$GLOBALS['config']['modesdir'].$current_mode_name." |awk '{print $3}'|awk -F/ '{print $ NF}'");
+//                    $array = (explode("=",$iso));
+//                    $iso = array_values(array_slice($array, -1))[0];
 
                     unlink($GLOBALS['config']['isodir'].$iso);
 
@@ -205,7 +246,8 @@ label config
 
                     //delete and create new config file with new iso name
                     unlink($GLOBALS['config']['modesdir'].$current_mode_name);
-                    $new_config = str_replace('placeholder.iso',$file_name,$base_config);
+                    $new_config = str_replace('{FILE_NAME}',$file_name,$base_config);
+                    $new_config = str_replace('{MODE_NAME}',$new_mode_name,$new_config);
 
                     //create config file
                     $handler = fopen($GLOBALS['config']['modesdir'].$new_mode_name,'w');
@@ -238,11 +280,9 @@ label config
                 $mode = array_values(array_slice($array, -1))[0];
 
                 //finding active ISO configured for this mode
-                $label = exec('grep -e "default " '.$GLOBALS['config']['modesdir'].$mode.' |awk \'{print $2}\'');
+                $label = exec('grep -e "ONTIMEOUT " '.$GLOBALS['config']['modesdir'].$mode.' |awk \'{print $2}\'');
 //                var_dump($label);
-                $iso = exec("cat ".$GLOBALS['config']['modesdir'].$mode." |sed -n '/label ".$label."/{n;n;p}'|awk '{print $3}'");
-                $array = (explode("=",$iso));
-                $iso = array_values(array_slice($array, -1))[0];
+                $iso = exec("grep initrd ".$GLOBALS['config']['modesdir'].$mode." |awk '{print $3}'|awk -F/ '{print $ NF}'");
 
                 if($iso !== ""){
                     if(is_file($GLOBALS['config']['isodir'].$iso)){
@@ -292,10 +332,8 @@ label config
 
             //find iso to delete it
             //finding active ISO configured for this mode
-            $label = exec('grep -e "default " '.$GLOBALS['config']['modesdir'].$mode.' |awk \'{print $2}\'');
-            $iso = exec("cat ".$GLOBALS['config']['modesdir'].$mode." |sed -n '/label ".$label."/{n;n;p}'|awk '{print $3}'");
-            $array = (explode("=",$iso));
-            $iso = array_values(array_slice($array, -1))[0];
+            $label = exec('grep -e "ONTIMEOUT " '.$GLOBALS['config']['modesdir'].$mode.' |awk \'{print $2}\'');
+            $iso = exec("grep initrd ".$GLOBALS['config']['modesdir'].$mode." |awk '{print $3}'|awk -F/ '{print $ NF}'");
 
             unlink($GLOBALS['config']['isodir'].$iso);
 
